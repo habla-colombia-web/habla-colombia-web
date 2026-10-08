@@ -56,14 +56,19 @@ export default function BookingModal({
       return;
     }
     setSaving(true);
-    const { error } = await createClient()
-      .from("bookings")
-      .insert({
-        place_id: place.id,
-        tour_date: date,
-        people,
-        notes: notes.trim() || null,
-      });
+    const sb = createClient();
+    const { data: u } = await sb.auth.getUser();
+    const meta = u.user?.user_metadata?.full_name;
+    const customer =
+      (typeof meta === "string" && meta.trim()) || u.user?.email || "Cliente";
+    const { error } = await sb.from("bookings").insert({
+      place_id: place.id,
+      place_name: place.name,
+      customer_name: customer,
+      tour_date: date,
+      people: String(people),
+      notes: notes.trim() || null,
+    });
     setSaving(false);
     if (error) {
       setError("No pudimos guardar tu reserva. Intenta de nuevo.");

@@ -7,6 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { Course } from "@/types";
+import EnrollButton from "./EnrollButton";
 
 type CardStyle = { icon: LucideIcon; gradient: string; badge: string };
 
@@ -79,6 +80,7 @@ export default function CourseCard({ course }: { course: Course }) {
           </span>
           <span className="text-navy">{price}</span>
         </div>
+        <EnrollButton courseId={course.id} />
       </div>
     </article>
   );
