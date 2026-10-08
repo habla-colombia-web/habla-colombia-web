@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import NavLinks from "./NavLinks";
+import SignOutButton from "./SignOutButton";
 
-export default function MobileMenu() {
+export default function MobileMenu({ userName }: { userName: string | null }) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -26,20 +27,34 @@ export default function MobileMenu() {
             <NavLinks onNavigate={close} />
           </nav>
           <div className="mt-6 flex flex-col gap-3">
-            <Link
-              href="/login"
-              onClick={close}
-              className="rounded-full border border-white/70 px-4 py-2 text-center text-sm font-medium"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              href="/registro"
-              onClick={close}
-              className="rounded-full bg-gold px-4 py-2 text-center text-sm font-semibold text-navy"
-            >
-              Únete ahora
-            </Link>
+            {userName ? (
+              <>
+                <p className="truncate text-center text-sm font-medium">
+                  Hola, {userName}
+                </p>
+                <SignOutButton
+                  onDone={close}
+                  className="rounded-full border border-white/70 px-4 py-2 text-center text-sm font-medium disabled:opacity-60"
+                />
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={close}
+                  className="rounded-full border border-white/70 px-4 py-2 text-center text-sm font-medium"
+                >
+                  Iniciar sesión
+                </Link>
+                <Link
+                  href="/registro"
+                  onClick={close}
+                  className="rounded-full bg-gold px-4 py-2 text-center text-sm font-semibold text-navy"
+                >
+                  Únete ahora
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
