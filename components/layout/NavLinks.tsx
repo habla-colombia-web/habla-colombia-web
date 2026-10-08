@@ -6,6 +6,7 @@ const NAV: NavItem[] = [
   { label: "Inicio", href: "/#inicio" },
   { label: "Cursos", href: "/#cursos" },
   { label: "Turismo", href: "/#turismo" },
+  { label: "Mis reservas", href: "/mis-reservas" },
   { label: "Profesores" },
   { label: "Precios" },
   { label: "Sobre nosotros" },
