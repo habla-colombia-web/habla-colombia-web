@@ -9,6 +9,7 @@ import {
   GraduationCap,
   Globe,
   Sparkles,
+  ShieldCheck,
   Home,
   Menu,
   User,
@@ -50,12 +51,14 @@ export default function StudentShell({
   userName,
   userEmail,
   avatarUrl,
+  isAdmin = false,
   signOut,
   children,
 }: {
   userName: string;
   userEmail: string;
   avatarUrl?: string | null;
+  isAdmin?: boolean;
   signOut: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -64,7 +67,10 @@ export default function StudentShell({
 
   const nav = (
     <nav className="flex flex-col gap-1 px-3" aria-label="Panel del estudiante">
-      {ITEMS.map(({ href, label, icon: Icon }) => {
+      {[
+        ...ITEMS,
+        ...(isAdmin ? [{ href: "/admin", label: "Administración", icon: ShieldCheck }] : []),
+      ].map(({ href, label, icon: Icon }) => {
         const on =
           href === "/" ? false : href === "/dashboard" ? pathname === href : pathname.startsWith(href);
         return (
