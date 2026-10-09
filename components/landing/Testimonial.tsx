@@ -3,18 +3,29 @@ import { User } from "lucide-react";
 export default function Testimonial({
   quote,
   author,
+  image,
 }: {
   quote: string;
   author: string;
+  image: string;
 }) {
   return (
     <aside
       aria-label="Testimonio"
       className="flex flex-col justify-between rounded-2xl bg-navy p-6 text-white"
     >
-      <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
-        <User size={36} aria-hidden="true" />
-      </div>
+      {image ? (
+        <div
+          role="img"
+          aria-label={author}
+          className="h-20 w-20 rounded-full bg-cover bg-center ring-2 ring-white/30"
+          style={{ backgroundImage: `url("${image}")` }}
+        />
+      ) : (
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
+          <User size={36} aria-hidden="true" />
+        </div>
+      )}
       <blockquote className="mt-6 text-lg italic leading-snug">{quote}</blockquote>
       <p className="mt-6 text-sm">
         <strong className="block">{author}</strong>

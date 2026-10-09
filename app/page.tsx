@@ -52,6 +52,7 @@ export default async function Home() {
           <Testimonial
             quote={content.testimonial_quote}
             author={content.testimonial_author}
+            image={content.testimonial_image}
           />
         </div>
       </section>
