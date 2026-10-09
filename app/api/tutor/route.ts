@@ -71,9 +71,12 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+        model: process.env.GROQ_MODEL || "openai/gpt-oss-120b",
         temperature: 0.6,
-        max_tokens: 400,
+        max_tokens: 1500,
+        ...((process.env.GROQ_MODEL || "openai/gpt-oss-120b").startsWith("openai/gpt-oss")
+          ? { reasoning_effort: "low" }
+          : {}),
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: systemPrompt(body.scenario, body.level) },
@@ -90,6 +93,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "busy" }, { status: 429 });
   }
   if (!res.ok) {
+    console.error("Groq error", res.status, (await res.text().catch(() => "")).slice(0, 300));
     return NextResponse.json({ error: "upstream" }, { status: 502 });
   }
 
