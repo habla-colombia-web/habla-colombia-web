@@ -73,11 +73,11 @@ export default async function ProfesoresPage() {
                 <div
                   role="img"
                   aria-label={t.name}
-                  className="h-56 w-full bg-cover bg-center"
+                  className="h-72 w-full bg-cover bg-top"
                   style={{ backgroundImage: `url("${t.image_url}")` }}
                 />
               ) : (
-                <div className="flex h-56 w-full items-center justify-center bg-linear-to-br from-brand to-navy text-6xl font-bold text-white">
+                <div className="flex h-72 w-full items-center justify-center bg-linear-to-br from-brand to-navy text-6xl font-bold text-white">
                   {t.name.charAt(0).toUpperCase()}
                 </div>
               )}
