@@ -229,7 +229,7 @@ export default async function DashboardPage() {
                 </span>
                 <span className="min-w-0">
                   <span className="block text-sm font-semibold text-navy">Practicar con IA</span>
-                  <span className="block truncate text-xs text-muted">Próximamente</span>
+                  <span className="block truncate text-xs text-muted">Conversa con tu tutor virtual</span>
                 </span>
               </div>
             </section>

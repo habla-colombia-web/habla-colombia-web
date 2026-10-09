@@ -8,6 +8,7 @@ import {
   CalendarDays,
   GraduationCap,
   Globe,
+  Sparkles,
   Home,
   Menu,
   User,
@@ -19,6 +20,7 @@ const ITEMS = [
   { href: "/cursos", label: "Cursos", icon: BookOpen },
   { href: "/dashboard/profesores", label: "Profesores", icon: GraduationCap },
   { href: "/dashboard/reservas", label: "Mis reservas", icon: CalendarDays },
+  { href: "/dashboard/practicar", label: "Practicar con IA", icon: Sparkles },
   { href: "/dashboard/perfil", label: "Perfil", icon: User },
   { href: "/", label: "Sitio web", icon: Globe },
 ];
