@@ -17,6 +17,9 @@ export default function BookingModal({
 }) {
   // undefined = verificando, null = sin sesión, string = correo del usuario
   const [user, setUser] = useState<string | null | undefined>(undefined);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
   const [people, setPeople] = useState(1);
   const [notes, setNotes] = useState("");
@@ -38,7 +41,17 @@ export default function BookingModal({
     createClient()
       .auth.getUser()
       .then(({ data }) => {
-        if (active) setUser(data.user ? (data.user.email ?? "tu cuenta") : null);
+        if (!active) return;
+        const u = data.user;
+        if (!u) {
+          setUser(null);
+          return;
+        }
+        const meta = u.user_metadata ?? {};
+        setUser(u.email ?? "tu cuenta");
+        setEmail(u.email ?? "");
+        if (typeof meta.full_name === "string") setName(meta.full_name);
+        if (typeof meta.whatsapp === "string") setPhone(meta.whatsapp);
       })
       .catch(() => {
         if (active) setUser(null);
@@ -55,16 +68,22 @@ export default function BookingModal({
       setError("Elige una fecha de hoy en adelante.");
       return;
     }
+    if (name.trim().length < 3) {
+      setError("Escribe tu nombre completo.");
+      return;
+    }
+    if (phone.replace(/\D/g, "").length < 7) {
+      setError("Escribe un número de WhatsApp válido.");
+      return;
+    }
     setSaving(true);
     const sb = createClient();
-    const { data: u } = await sb.auth.getUser();
-    const meta = u.user?.user_metadata?.full_name;
-    const customer =
-      (typeof meta === "string" && meta.trim()) || u.user?.email || "Cliente";
     const { error } = await sb.from("bookings").insert({
       place_id: place.id,
       place_name: place.name,
-      customer_name: customer,
+      customer_name: name.trim(),
+      customer_phone: phone.trim(),
+      customer_email: email.trim() || null,
       tour_date: date,
       people: String(people),
       notes: notes.trim() || null,
@@ -74,6 +93,8 @@ export default function BookingModal({
       setError("No pudimos guardar tu reserva. Intenta de nuevo.");
       return;
     }
+    // Recordar el WhatsApp para la próxima reserva (no bloquea si falla)
+    sb.auth.updateUser({ data: { whatsapp: phone.trim() } }).catch(() => {});
     setDone(true);
   }
 
@@ -144,7 +165,7 @@ export default function BookingModal({
                 Cerrar
               </button>
               <Link
-                href="/mis-reservas"
+                href="/dashboard/reservas"
                 className="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-navy hover:brightness-95"
               >
                 Ver mis reservas
@@ -155,6 +176,39 @@ export default function BookingModal({
 
         {typeof user === "string" && !done && (
           <form onSubmit={onSubmit} className="mt-4 space-y-4">
+            <label className="block text-sm font-medium text-navy">
+              Nombre completo
+              <input
+                type="text"
+                required
+                maxLength={120}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+            <label className="block text-sm font-medium text-navy">
+              WhatsApp
+              <input
+                type="tel"
+                required
+                maxLength={25}
+                placeholder="300 123 4567"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className={inputClass}
+              />
+            </label>
+            <label className="block text-sm font-medium text-navy">
+              Correo electrónico
+              <input
+                type="email"
+                maxLength={120}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={inputClass}
+              />
+            </label>
             <label className="block text-sm font-medium text-navy">
               Fecha
               <input
@@ -179,7 +233,7 @@ export default function BookingModal({
               />
             </label>
             <label className="block text-sm font-medium text-navy">
-              Notas (opcional)
+              Comentarios o instrucciones (opcional)
               <textarea
                 rows={3}
                 maxLength={500}

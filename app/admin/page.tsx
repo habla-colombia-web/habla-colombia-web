@@ -2,15 +2,21 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import StatusSelect from "@/components/admin/StatusSelect";
+import { BOOKING_STATUS, bookingCode, whatsappLink } from "@/lib/bookings";
 
+type PlaceRef = { image_url: string | null };
 type BookingRow = {
   id: number | string;
   place_name: string;
   customer_name: string;
+  customer_phone: string | null;
+  customer_email: string | null;
   tour_date: string;
   people: string;
   notes: string | null;
   status: string;
+  created_at: string;
+  places: PlaceRef | PlaceRef[] | null;
 };
 
 type EnrollmentRow = {
@@ -21,8 +27,11 @@ type EnrollmentRow = {
   course_title: string;
 };
 
-const BOOKING_STATUS = ["pendiente", "confirmada", "cancelada"];
 const ENROLL_STATUS = ["activa", "cancelada"];
+
+function one<T>(v: T | T[] | null): T | null {
+  return Array.isArray(v) ? (v[0] ?? null) : v;
+}
 
 function formatDate(d: string) {
   return new Date(`${d}T00:00:00`).toLocaleDateString("es-CO", {
@@ -41,7 +50,9 @@ export default async function AdminPage() {
   const [bookingsRes, enrollRes] = await Promise.all([
     sb
       .from("bookings")
-      .select("id,place_name,customer_name,tour_date,people,notes,status")
+      .select(
+        "id,place_name,customer_name,customer_phone,customer_email,tour_date,people,notes,status,created_at,places(image_url)",
+      )
       .order("created_at", { ascending: false }),
     sb.rpc("admin_list_enrollments"),
   ]);
@@ -94,32 +105,77 @@ export default async function AdminPage() {
           <table className="min-w-full divide-y divide-black/5">
             <thead>
               <tr>
+                <th className={th}>Código</th>
+                <th className={th}>Destino</th>
                 <th className={th}>Cliente</th>
-                <th className={th}>Lugar</th>
+                <th className={th}>Contacto</th>
                 <th className={th}>Fecha</th>
                 <th className={th}>Personas</th>
-                <th className={th}>Notas</th>
+                <th className={th}>Comentarios</th>
+                <th className={th}>Creada</th>
                 <th className={th}>Estado</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {bookings.map((b) => (
-                <tr key={b.id}>
-                  <td className={td}>{b.customer_name}</td>
-                  <td className={td}>{b.place_name}</td>
-                  <td className={td}>{formatDate(b.tour_date)}</td>
-                  <td className={td}>{b.people}</td>
-                  <td className={td}>{b.notes ?? ""}</td>
-                  <td className={td}>
-                    <StatusSelect
-                      table="bookings"
-                      id={b.id}
-                      current={b.status}
-                      options={BOOKING_STATUS}
-                    />
-                  </td>
-                </tr>
-              ))}
+              {bookings.map((b) => {
+                const img = one(b.places)?.image_url ?? null;
+                return (
+                  <tr key={b.id}>
+                    <td className={`${td} whitespace-nowrap font-semibold`}>
+                      {bookingCode(b.id)}
+                    </td>
+                    <td className={td}>
+                      <div className="flex items-center gap-3">
+                        {img && (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={img}
+                            alt=""
+                            className="h-12 w-16 rounded-lg object-cover"
+                          />
+                        )}
+                        <span>{b.place_name}</span>
+                      </div>
+                    </td>
+                    <td className={td}>{b.customer_name}</td>
+                    <td className={td}>
+                      {b.customer_phone ? (
+                        <a
+                          href={whatsappLink(b.customer_phone)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-brand hover:underline"
+                        >
+                          {b.customer_phone}
+                        </a>
+                      ) : (
+                        <span className="text-muted">Sin WhatsApp</span>
+                      )}
+                      {b.customer_email && (
+                        <div className="text-xs text-muted">
+                          {b.customer_email}
+                        </div>
+                      )}
+                    </td>
+                    <td className={td}>{formatDate(b.tour_date)}</td>
+                    <td className={td}>{b.people}</td>
+                    <td className={td}>{b.notes ?? ""}</td>
+                    <td className={td}>
+                      {new Date(b.created_at).toLocaleDateString("es-CO", {
+                        dateStyle: "medium",
+                      })}
+                    </td>
+                    <td className={td}>
+                      <StatusSelect
+                        table="bookings"
+                        id={b.id}
+                        current={b.status}
+                        options={BOOKING_STATUS}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
