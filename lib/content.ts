@@ -9,6 +9,7 @@ export const CONTENT_DEFAULTS = {
   testimonial_quote:
     "Ahora puedo poner en práctica lo que aprendí y hablar con los locales sin miedo.",
   testimonial_author: "James, Estados Unidos",
+  testimonial_image: "",
   about_text:
     "Habla Colombia nació para que aprender español sea algo práctico, natural y divertido. Combinamos clases online con profesores nativos y recorridos con guías locales, para que practiques el idioma mientras conoces Colombia.\n\nCreemos que un idioma se aprende usándolo: en una conversación, en un viaje, en el trabajo y en la vida diaria. Por eso nuestros cursos parten de situaciones reales.",
 };

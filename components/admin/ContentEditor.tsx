@@ -12,6 +12,7 @@ const FIELDS: Field[] = [
   { key: "hero_title", label: "Titulo del banner", type: "text" },
   { key: "hero_highlight", label: "Parte resaltada del titulo", type: "text" },
   { key: "hero_text", label: "Texto del banner", type: "textarea" },
+  { key: "testimonial_image", label: "Foto del testimonio", type: "image" },
   { key: "testimonial_quote", label: "Testimonio", type: "textarea" },
   { key: "testimonial_author", label: "Autor del testimonio", type: "text" },
   {
