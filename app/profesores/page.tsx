@@ -2,6 +2,8 @@ import Link from "next/link";
 import { GraduationCap, MessagesSquare, Plane, Briefcase } from "lucide-react";
 import { getSupabase } from "@/lib/supabase/public";
 
+export const dynamic = "force-dynamic";
+
 type Teacher = {
   id: string;
   name: string;
