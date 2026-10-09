@@ -15,6 +15,7 @@ type CourseRef = { title: string; level: string };
 type EnrollmentRow = {
   id: string;
   status: string;
+  course_id: string;
   courses: CourseRef | CourseRef[] | null;
 };
 
@@ -41,7 +42,7 @@ export default async function MisReservasPage() {
       .order("tour_date", { ascending: true }),
     sb
       .from("enrollments")
-      .select("id,status,courses(title,level)")
+      .select("id,status,course_id,courses(title,level)")
       .eq("user_id", auth.user.id)
       .order("created_at", { ascending: false }),
   ]);
@@ -115,7 +116,7 @@ export default async function MisReservasPage() {
             return (
               <li
                 key={e.id}
-                className="flex items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5"
               >
                 <div>
                   <h3 className="text-base font-bold text-navy">
@@ -123,9 +124,19 @@ export default async function MisReservasPage() {
                   </h3>
                   {c && <p className="text-sm text-muted">Nivel {c.level}</p>}
                 </div>
-                <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold capitalize text-emerald-700">
-                  {e.status}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold capitalize text-emerald-700">
+                    {e.status}
+                  </span>
+                  {e.status === "activa" && (
+                    <Link
+                      href={`/curso/${e.course_id}`}
+                      className="rounded-full bg-gold px-4 py-1.5 text-xs font-semibold text-navy hover:brightness-95"
+                    >
+                      Entrar al curso
+                    </Link>
+                  )}
+                </div>
               </li>
             );
           })}
