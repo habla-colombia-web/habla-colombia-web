@@ -6,6 +6,10 @@ export const CONTENT_DEFAULTS = {
   hero_text:
     "Aprende español de forma práctica, natural y divertida. Con profesores nativos, situaciones reales y una comunidad internacional que, como tú, quiere vivir nuevas experiencias.",
   hero_image: "",
+  social_facebook: "",
+  social_instagram: "",
+  social_x: "",
+  social_whatsapp: "",
   testimonial_quote:
     "Ahora puedo poner en práctica lo que aprendí y hablar con los locales sin miedo.",
   testimonial_author: "James, Estados Unidos",

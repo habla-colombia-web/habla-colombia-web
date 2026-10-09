@@ -7,7 +7,7 @@ import ImageUploader from "./ImageUploader";
 
 type Field = { key: string; label: string; type: "text" | "textarea" | "image" };
 
-const FIELDS: Field[] = [
+const BASE_FIELDS: Field[] = [
   { key: "hero_image", label: "Imagen del banner principal", type: "image" },
   { key: "hero_title", label: "Titulo del banner", type: "text" },
   { key: "hero_highlight", label: "Parte resaltada del titulo", type: "text" },
@@ -19,6 +19,18 @@ const FIELDS: Field[] = [
     key: "about_text",
     label: "Texto de Sobre nosotros (deja una linea en blanco entre parrafos)",
     type: "textarea",
+  },
+];
+
+const FIELDS: Field[] = [
+  ...BASE_FIELDS,
+  { key: "social_facebook", label: "Enlace de Facebook (https://...)", type: "text" },
+  { key: "social_instagram", label: "Enlace de Instagram (https://...)", type: "text" },
+  { key: "social_x", label: "Enlace de X (https://...)", type: "text" },
+  {
+    key: "social_whatsapp",
+    label: "WhatsApp: numero con codigo de pais (ej. 573001234567) o enlace",
+    type: "text",
   },
 ];
 
