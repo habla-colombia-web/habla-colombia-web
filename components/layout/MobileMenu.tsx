@@ -31,6 +31,11 @@ export default function MobileMenu({
         <div className="absolute inset-x-0 top-16 border-t border-white/10 bg-navy px-4 pb-6 pt-4">
           <nav aria-label="Principal móvil" className="flex flex-col gap-4 text-base font-medium">
             <NavLinks onNavigate={close} />
+            {userName && (
+              <Link href="/dashboard" onClick={close} className="text-gold">
+                Mi panel
+              </Link>
+            )}
             {isAdmin && (
               <Link href="/admin" onClick={close} className="text-gold">
                 Panel
