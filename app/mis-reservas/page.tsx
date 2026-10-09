@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CancelBookingButton from "@/components/bookings/CancelBookingButton";
 import { bookingCode, statusClass, statusLabel } from "@/lib/bookings";
+import { bgImage } from "@/lib/progress";
 
 type PlaceRef = { image_url: string | null };
 type BookingRow = {
@@ -18,7 +19,12 @@ type BookingRow = {
   created_at: string;
   places: PlaceRef | PlaceRef[] | null;
 };
-type CourseRef = { title: string; level: string };
+type CourseRef = {
+  title: string;
+  level: string;
+  short_description: string | null;
+  image_url: string | null;
+};
 type EnrollmentRow = {
   id: string;
   status: string;
@@ -51,7 +57,9 @@ export default async function MisReservasPage() {
       .order("tour_date", { ascending: true }),
     sb
       .from("enrollments")
-      .select("id,status,course_id,courses(title,level)")
+      .select(
+        "id,status,course_id,courses(title,level,short_description,image_url)",
+      )
       .eq("user_id", auth.user.id)
       .order("created_at", { ascending: false }),
   ]);
@@ -158,31 +166,63 @@ export default async function MisReservasPage() {
           </Link>
         </div>
       ) : (
-        <ul className="mt-6 space-y-3">
+        <ul className="mt-6 space-y-4">
           {enrollments.map((e) => {
             const c = one(e.courses);
+            const active = e.status === "activa";
             return (
               <li
                 key={e.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5"
+                className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 sm:flex"
               >
-                <div>
-                  <h3 className="text-base font-bold text-navy">
-                    {c?.title ?? "Curso"}
-                  </h3>
-                  {c && <p className="text-sm text-muted">Nivel {c.level}</p>}
+                <div
+                  className="relative h-40 w-full bg-linear-to-br from-brand to-navy bg-cover bg-center sm:h-auto sm:w-44"
+                  style={{ backgroundImage: bgImage(c?.image_url ?? null) }}
+                  role="img"
+                  aria-label={c?.title ?? "Curso"}
+                >
+                  {!c?.image_url && c && (
+                    <span className="absolute inset-0 flex items-center justify-center text-4xl font-bold text-white/90">
+                      {c.level}
+                    </span>
+                  )}
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold capitalize text-emerald-700">
-                    {e.status}
-                  </span>
-                  {e.status === "activa" && (
-                    <Link
-                      href={`/dashboard/curso/${e.course_id}`}
-                      className="rounded-full bg-gold px-4 py-1.5 text-xs font-semibold text-navy hover:brightness-95"
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                      {c && (
+                        <p className="text-xs font-semibold uppercase tracking-wide text-brand">
+                          Nivel {c.level}
+                        </p>
+                      )}
+                      <h3 className="text-base font-bold text-navy">
+                        {c?.title ?? "Curso"}
+                      </h3>
+                    </div>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${
+                        active
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
                     >
-                      Entrar al curso
-                    </Link>
+                      {e.status}
+                    </span>
+                  </div>
+                  {c?.short_description && (
+                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                      {c.short_description}
+                    </p>
+                  )}
+                  {active && (
+                    <div className="mt-4">
+                      <Link
+                        href={`/dashboard/curso/${e.course_id}`}
+                        className="inline-block rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy hover:brightness-95"
+                      >
+                        Entrar al curso
+                      </Link>
+                    </div>
                   )}
                 </div>
               </li>

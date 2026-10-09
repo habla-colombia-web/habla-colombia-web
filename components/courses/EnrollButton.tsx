@@ -47,7 +47,7 @@ export default function EnrollButton({ courseId }: { courseId: string }) {
     return (
       <p role="status" className="mt-4 text-xs font-semibold text-emerald-700">
         {state === "done" ? "Inscripción lista. " : "Ya estás inscrito. "}
-        <Link href="/mis-reservas" className="underline">
+        <Link href="/dashboard/reservas" className="underline">
           Ver mis cursos
         </Link>
       </p>
