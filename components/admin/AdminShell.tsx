@@ -25,8 +25,9 @@ const ITEMS = [
 function Brand() {
   return (
     <div className="px-5 py-6">
-      <p className="text-xl font-bold leading-tight text-white">Habla Colombia</p>
-      <p className="text-xs text-white/70">Español real, vida real.</p>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.png" alt="Habla Colombia" className="h-12 w-auto rounded-xl bg-white p-1.5" />
+      <span className="sr-only">Español real, vida real.</span>
     </div>
   );
 }

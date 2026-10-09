@@ -132,7 +132,7 @@ export default async function LeccionPage({
   return (
     <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <Link
-        href={`/curso/${lesson.course_id}`}
+        href={`/dashboard/curso/${lesson.course_id}`}
         className="text-sm font-semibold text-brand"
       >
         Volver al curso: {courseTitle}
@@ -220,7 +220,7 @@ export default async function LeccionPage({
           <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-black/10 pt-6">
             {prev ? (
               <Link
-                href={`/lecciones/${prev.id}`}
+                href={`/dashboard/lecciones/${prev.id}`}
                 className="rounded-full border border-navy px-5 py-2 text-sm font-semibold text-navy hover:bg-black/5"
               >
                 Clase anterior
@@ -230,14 +230,14 @@ export default async function LeccionPage({
             )}
             {next ? (
               <Link
-                href={`/lecciones/${next.id}`}
+                href={`/dashboard/lecciones/${next.id}`}
                 className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy hover:brightness-95"
               >
                 Siguiente clase
               </Link>
             ) : (
               <Link
-                href={`/curso/${lesson.course_id}`}
+                href={`/dashboard/curso/${lesson.course_id}`}
                 className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy hover:brightness-95"
               >
                 Volver al curso
@@ -264,7 +264,7 @@ export default async function LeccionPage({
                   {g.items.map((l) => (
                     <li key={l.id}>
                       <Link
-                        href={`/lecciones/${l.id}`}
+                        href={`/dashboard/lecciones/${l.id}`}
                         aria-current={String(l.id) === String(lesson.id) ? "page" : undefined}
                         className={`flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm ${
                           String(l.id) === String(lesson.id)

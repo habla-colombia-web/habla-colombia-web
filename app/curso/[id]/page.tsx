@@ -193,7 +193,7 @@ export default async function CursoPage({
 
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-      <Link href="/mis-reservas" className="text-sm font-semibold text-brand">
+      <Link href="/dashboard/reservas" className="text-sm font-semibold text-brand">
         Volver a mis cursos
       </Link>
       <h1 className="mt-2 text-3xl font-bold text-navy">{course.title}</h1>
