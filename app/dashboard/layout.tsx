@@ -11,6 +11,7 @@ export default async function DashboardLayout({
   const sb = await createClient();
   const { data: auth } = await sb.auth.getUser();
   if (!auth.user) redirect("/login");
+  const { data: isAdminRpc } = await sb.rpc("is_admin");
 
   const { data: prof } = await sb
     .from("student_profiles")
@@ -32,6 +33,7 @@ export default async function DashboardLayout({
       userName={userName}
       userEmail={email}
       avatarUrl={profile?.avatar_url ?? null}
+      isAdmin={Boolean(isAdminRpc)}
       signOut={
         <SignOutButton className="rounded-full border border-navy/30 px-4 py-2 text-sm font-medium text-navy hover:bg-black/5 disabled:opacity-60" />
       }

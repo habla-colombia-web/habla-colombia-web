@@ -34,7 +34,8 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         setError("Correo o contraseña incorrectos.");
         return;
       }
-      router.push("/dashboard");
+      const { data: adm } = await sb.rpc("is_admin");
+      router.push(adm ? "/admin" : "/dashboard");
       router.refresh();
       return;
     }
