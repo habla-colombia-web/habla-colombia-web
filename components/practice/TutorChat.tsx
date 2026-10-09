@@ -25,6 +25,7 @@ const chip = (active: boolean) =>
 export default function TutorChat() {
   const [scenario, setScenario] = useState<ScenarioKey>("presentarse");
   const [level, setLevel] = useState<Level>("A1");
+  const [help, setHelp] = useState<"en" | "es">("en");
   const [messages, setMessages] = useState<Msg[]>([
     { role: "assistant", content: SCENARIOS.presentarse.opener },
   ]);
@@ -59,6 +60,7 @@ export default function TutorChat() {
         body: JSON.stringify({
           scenario,
           level,
+          help,
           messages: next.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
@@ -116,6 +118,18 @@ export default function TutorChat() {
         </select>
       </label>
 
+      <label className="mt-3 flex items-center gap-2 text-sm font-medium text-navy">
+        Explicaciones en
+        <select
+          value={help}
+          onChange={(e) => setHelp(e.target.value as "en" | "es")}
+          className="rounded-lg border border-black/15 bg-white px-3 py-1.5 text-sm text-navy outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
+        >
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </label>
+
       <div className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
         <div className="flex items-center gap-3 border-b border-black/5 bg-navy px-5 py-3 text-white">
           <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gold text-navy">
@@ -144,7 +158,7 @@ export default function TutorChat() {
               </div>
               {m.role === "user" && m.correction && (
                 <div className="mt-2 ml-auto max-w-[85%] rounded-xl border border-amber-200 bg-amber-50 p-3 text-left text-xs text-navy">
-                  <p className="font-bold text-amber-800">Corrección</p>
+                  <p className="font-bold text-amber-800">Corrección · How to say it</p>
                   <p className="mt-1 text-muted line-through">{m.correction.original}</p>
                   <p className="mt-0.5 font-semibold text-emerald-700">
                     {m.correction.corrected}
@@ -184,7 +198,7 @@ export default function TutorChat() {
                   void send();
                 }
               }}
-              placeholder="Escribe en español..."
+              placeholder="Escribe en español (o en English si no sabes cómo decirlo)..."
               className="w-full resize-none rounded-xl border border-black/15 bg-white px-3 py-2 text-sm text-navy outline-none focus:border-brand focus:ring-2 focus:ring-brand/30"
             />
           </label>
