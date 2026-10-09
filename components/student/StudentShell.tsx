@@ -10,6 +10,7 @@ import {
   Globe,
   Home,
   Menu,
+  User,
   X,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ const ITEMS = [
   { href: "/cursos", label: "Cursos", icon: BookOpen },
   { href: "/profesores", label: "Profesores", icon: GraduationCap },
   { href: "/mis-reservas", label: "Mis reservas", icon: CalendarDays },
+  { href: "/dashboard/perfil", label: "Perfil", icon: User },
   { href: "/", label: "Sitio web", icon: Globe },
 ];
 
@@ -44,11 +46,13 @@ function Tagline() {
 export default function StudentShell({
   userName,
   userEmail,
+  avatarUrl,
   signOut,
   children,
 }: {
   userName: string;
   userEmail: string;
+  avatarUrl?: string | null;
   signOut: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -58,7 +62,7 @@ export default function StudentShell({
   const nav = (
     <nav className="flex flex-col gap-1 px-3" aria-label="Panel del estudiante">
       {ITEMS.map(({ href, label, icon: Icon }) => {
-        const on = href === "/dashboard" && pathname === "/dashboard";
+        const on = href.startsWith("/dashboard") && pathname === href;
         return (
           <Link
             key={href}
@@ -122,9 +126,14 @@ export default function StudentShell({
           <div className="ml-auto flex items-center gap-3">
             <span
               aria-hidden="true"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-sm font-bold text-white"
+              className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-brand text-sm font-bold text-white"
             >
-              {(userName.trim().charAt(0) || "?").toUpperCase()}
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt="" className="h-full w-full object-cover" />
+              ) : (
+                (userName.trim().charAt(0) || "?").toUpperCase()
+              )}
             </span>
             <div className="hidden min-w-0 sm:block">
               <p className="truncate text-sm font-semibold text-navy">{userName}</p>
