@@ -37,10 +37,12 @@ export default async function MisReservasPage() {
     sb
       .from("bookings")
       .select("id,place_name,tour_date,people,notes,status")
+      .eq("user_id", auth.user.id)
       .order("tour_date", { ascending: true }),
     sb
       .from("enrollments")
       .select("id,status,courses(title,level)")
+      .eq("user_id", auth.user.id)
       .order("created_at", { ascending: false }),
   ]);
 
