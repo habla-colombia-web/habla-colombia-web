@@ -24,7 +24,7 @@ export default function Hero({
             className="absolute inset-0 -z-10 bg-cover bg-center"
             style={{ backgroundImage: `url("${image}")` }}
           />
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-navy/60" />
+          
         </>
       ) : (
         <svg
@@ -53,10 +53,10 @@ export default function Hero({
         <p className="text-xs font-semibold uppercase tracking-widest text-white/80">
           Aprende español colombiano
         </p>
-        <h1 className="mt-4 max-w-xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+        <h1 className="mt-4 max-w-xl text-4xl font-bold leading-tight drop-shadow-lg sm:text-5xl lg:text-6xl">
           {title} <span className="text-gold">{highlight}</span>
         </h1>
-        <p className="mt-5 max-w-lg text-base text-white/90 sm:text-lg">{text}</p>
+        <p className="mt-5 max-w-lg text-base text-white drop-shadow-lg sm:text-lg">{text}</p>
         <div className="mt-8 flex flex-wrap items-center gap-4">
           <Link
             href="/registro"
