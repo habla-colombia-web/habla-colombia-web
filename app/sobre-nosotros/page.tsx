@@ -1,6 +1,13 @@
 import Link from "next/link";
+import { getContent } from "@/lib/content";
 
-export default function SobreNosotrosPage() {
+export default async function SobreNosotrosPage() {
+  const content = await getContent();
+  const paragraphs = content.about_text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
   return (
     <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <p className="text-xs font-bold uppercase tracking-widest text-brand">
@@ -10,17 +17,9 @@ export default function SobreNosotrosPage() {
         Español real, vida real
       </h1>
       <div className="mt-6 space-y-4 leading-relaxed text-foreground">
-        <p>
-          Habla Colombia nació para que aprender español sea algo práctico,
-          natural y divertido. Combinamos clases online con profesores nativos
-          y recorridos con guías locales, para que practiques el idioma
-          mientras conoces Colombia.
-        </p>
-        <p>
-          Creemos que un idioma se aprende usándolo: en una conversación, en un
-          viaje, en el trabajo y en la vida diaria. Por eso nuestros cursos
-          parten de situaciones reales.
-        </p>
+        {paragraphs.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
       </div>
       <div className="mt-10 flex flex-wrap gap-3">
         <Link
