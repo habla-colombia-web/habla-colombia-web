@@ -6,7 +6,13 @@ import { Menu, X } from "lucide-react";
 import NavLinks from "./NavLinks";
 import SignOutButton from "./SignOutButton";
 
-export default function MobileMenu({ userName }: { userName: string | null }) {
+export default function MobileMenu({
+  userName,
+  isAdmin = false,
+}: {
+  userName: string | null;
+  isAdmin?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -25,6 +31,11 @@ export default function MobileMenu({ userName }: { userName: string | null }) {
         <div className="absolute inset-x-0 top-16 border-t border-white/10 bg-navy px-4 pb-6 pt-4">
           <nav aria-label="Principal móvil" className="flex flex-col gap-4 text-base font-medium">
             <NavLinks onNavigate={close} />
+            {isAdmin && (
+              <Link href="/admin" onClick={close} className="text-gold">
+                Panel
+              </Link>
+            )}
           </nav>
           <div className="mt-6 flex flex-col gap-3">
             {userName ? (

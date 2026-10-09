@@ -5,22 +5,29 @@ import MobileMenu from "./MobileMenu";
 import SignOutButton from "./SignOutButton";
 import { createClient } from "@/lib/supabase/server";
 
-async function getUserName(): Promise<string | null> {
+async function getSession(): Promise<{
+  userName: string | null;
+  isAdmin: boolean;
+}> {
   try {
     const sb = await createClient();
     const { data } = await sb.auth.getUser();
     const user = data.user;
-    if (!user) return null;
+    if (!user) return { userName: null, isAdmin: false };
     const meta = user.user_metadata?.full_name;
     const full = typeof meta === "string" ? meta.trim() : "";
-    return full || user.email || "Mi cuenta";
+    const { data: admin } = await sb.rpc("is_admin");
+    return {
+      userName: full || user.email || "Mi cuenta",
+      isAdmin: admin === true,
+    };
   } catch {
-    return null;
+    return { userName: null, isAdmin: false };
   }
 }
 
 export default async function Header() {
-  const userName = await getUserName();
+  const { userName, isAdmin } = await getSession();
 
   return (
     <header className="sticky top-0 z-40 bg-navy text-white">
@@ -31,6 +38,11 @@ export default async function Header() {
           className="hidden items-center gap-7 text-sm font-medium lg:flex"
         >
           <NavLinks className="hover:text-gold" />
+          {isAdmin && (
+            <Link href="/admin" className="text-gold hover:underline">
+              Panel
+            </Link>
+          )}
         </nav>
         <div className="hidden items-center gap-3 lg:flex">
           {userName ? (
@@ -57,7 +69,7 @@ export default async function Header() {
             </>
           )}
         </div>
-        <MobileMenu userName={userName} />
+        <MobileMenu userName={userName} isAdmin={isAdmin} />
       </div>
     </header>
   );
