@@ -38,6 +38,11 @@ export default async function Header() {
           className="hidden items-center gap-7 text-sm font-medium lg:flex"
         >
           <NavLinks className="hover:text-gold" />
+          {userName && (
+            <Link href="/dashboard" className="text-gold hover:underline">
+              Mi panel
+            </Link>
+          )}
           {isAdmin && (
             <Link href="/admin" className="text-gold hover:underline">
               Panel

@@ -34,7 +34,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         setError("Correo o contraseña incorrectos.");
         return;
       }
-      router.push("/");
+      router.push("/dashboard");
       router.refresh();
       return;
     }
@@ -57,7 +57,7 @@ export default function AuthForm({ mode }: { mode: Mode }) {
       return;
     }
     if (data.session) {
-      router.push("/");
+      router.push("/dashboard");
       router.refresh();
     } else {
       setInfo("Cuenta creada. Revisa tu correo para confirmarla y luego inicia sesión.");
