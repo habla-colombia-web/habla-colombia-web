@@ -2,14 +2,21 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CancelBookingButton from "@/components/bookings/CancelBookingButton";
+import { bookingCode, statusClass, statusLabel } from "@/lib/bookings";
 
+type PlaceRef = { image_url: string | null };
 type BookingRow = {
   id: number | string;
   place_name: string;
+  customer_name: string | null;
+  customer_phone: string | null;
+  customer_email: string | null;
   tour_date: string;
   people: string;
   notes: string | null;
   status: string;
+  created_at: string;
+  places: PlaceRef | PlaceRef[] | null;
 };
 type CourseRef = { title: string; level: string };
 type EnrollmentRow = {
@@ -37,7 +44,9 @@ export default async function MisReservasPage() {
   const [bookingsRes, enrollRes] = await Promise.all([
     sb
       .from("bookings")
-      .select("id,place_name,tour_date,people,notes,status")
+      .select(
+        "id,place_name,customer_name,customer_phone,customer_email,tour_date,people,notes,status,created_at,places(image_url)",
+      )
       .eq("user_id", auth.user.id)
       .order("tour_date", { ascending: true }),
     sb
@@ -71,26 +80,65 @@ export default async function MisReservasPage() {
         </div>
       ) : (
         <ul className="mt-8 space-y-4">
-          {bookings.map((b) => (
-            <li
-              key={b.id}
-              className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-black/5"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <h2 className="text-base font-bold text-navy">
-                  {b.place_name}
-                </h2>
-                <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-semibold capitalize text-brand">
-                  {b.status}
-                </span>
-              </div>
-              <p className="mt-3 text-sm text-foreground">
-                {formatDate(b.tour_date)} · Personas: {b.people}
-              </p>
-              {b.notes && <p className="mt-2 text-sm text-muted">{b.notes}</p>}
-              {b.status === "pendiente" && <CancelBookingButton id={b.id} />}
-            </li>
-          ))}
+          {bookings.map((b) => {
+            const img = one(b.places)?.image_url ?? null;
+            return (
+              <li
+                key={b.id}
+                className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 sm:flex"
+              >
+                {img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={img}
+                    alt={b.place_name}
+                    className="h-40 w-full object-cover sm:h-auto sm:w-44"
+                  />
+                ) : (
+                  <div className="flex h-40 w-full items-center justify-center bg-brand/10 text-xs text-muted sm:h-auto sm:w-44">
+                    Sin imagen
+                  </div>
+                )}
+                <div className="flex-1 p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                      <p className="text-xs font-semibold tracking-wide text-muted">
+                        {bookingCode(b.id)}
+                      </p>
+                      <h2 className="text-base font-bold text-navy">
+                        {b.place_name}
+                      </h2>
+                    </div>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${statusClass(b.status)}`}
+                    >
+                      {statusLabel(b.status)}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm text-foreground">
+                    {formatDate(b.tour_date)} · Personas: {b.people}
+                  </p>
+                  {b.notes && (
+                    <p className="mt-2 text-sm text-muted">{b.notes}</p>
+                  )}
+                  <dl className="mt-3 space-y-0.5 text-xs text-muted">
+                    {b.customer_name && <div>Reserva a nombre de {b.customer_name}</div>}
+                    {b.customer_phone && <div>WhatsApp: {b.customer_phone}</div>}
+                    {b.customer_email && <div>Correo: {b.customer_email}</div>}
+                    <div>
+                      Creada el{" "}
+                      {new Date(b.created_at).toLocaleDateString("es-CO", {
+                        dateStyle: "medium",
+                      })}
+                    </div>
+                  </dl>
+                  {b.status === "pendiente" && (
+                    <CancelBookingButton id={b.id} />
+                  )}
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
 
