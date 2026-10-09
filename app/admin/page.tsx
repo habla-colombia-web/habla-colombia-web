@@ -68,6 +68,12 @@ export default async function AdminPage() {
         >
           Administrar profesores
         </Link>
+        <Link
+          href="/admin/clases"
+          className="rounded-full border border-navy px-5 py-2 text-sm font-semibold text-navy hover:bg-black/5"
+        >
+          Administrar clases
+        </Link>
       </div>
 
       <h2 className="mt-10 text-2xl font-bold text-navy">
