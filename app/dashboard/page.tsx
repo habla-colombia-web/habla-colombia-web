@@ -12,6 +12,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { formatBogota } from "@/lib/lessons";
 import { bgImage, orderLessons, percent } from "@/lib/progress";
+import { getContent } from "@/lib/content";
 
 type CourseRef = {
   id: string;
@@ -72,6 +73,8 @@ export default async function DashboardPage() {
   const { data: auth } = await sb.auth.getUser();
   if (!auth.user) redirect("/login");
   const uid = auth.user.id;
+  const content = await getContent();
+  const heroBg = bgImage(content.hero_image);
 
   const meta = auth.user.user_metadata?.full_name;
   const name =
@@ -176,7 +179,13 @@ export default async function DashboardPage() {
       ) : (
         <div className="grid gap-6 xl:grid-cols-[1fr_340px]">
           <div className="min-w-0 space-y-6">
-            <section className="rounded-3xl bg-gradient-to-r from-navy to-brand p-8 text-white shadow-sm">
+            <section
+              style={heroBg ? { backgroundImage: heroBg } : undefined}
+              className="relative isolate overflow-hidden rounded-3xl bg-gradient-to-r from-navy to-brand bg-cover bg-center p-8 text-white shadow-sm"
+            >
+              {heroBg && (
+                <div aria-hidden="true" className="absolute inset-0 -z-10 bg-gradient-to-r from-navy/90 via-navy/60 to-brand/40" />
+              )}
               <h1 className="text-3xl font-bold sm:text-4xl">Hola, {name}!</h1>
               <p className="mt-2 text-xl font-semibold">
                 Tu español te lleva <span className="text-gold">más lejos</span>
