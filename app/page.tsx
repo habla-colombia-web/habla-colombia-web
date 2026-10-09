@@ -1,4 +1,5 @@
 import Hero from "@/components/landing/Hero";
+import { getContent } from "@/lib/content";
 import Features from "@/components/landing/Features";
 import Testimonial from "@/components/landing/Testimonial";
 import CourseGrid from "@/components/courses/CourseGrid";
@@ -10,6 +11,7 @@ export const revalidate = 60;
 
 export default async function Home() {
   const sb = getSupabase();
+  const content = await getContent();
   const [coursesRes, placesRes] = await Promise.all([
     sb
       .from("courses")
@@ -28,7 +30,12 @@ export default async function Home() {
 
   return (
     <>
-      <Hero />
+      <Hero
+        title={content.hero_title}
+        highlight={content.hero_highlight}
+        text={content.hero_text}
+        image={content.hero_image}
+      />
       <Features />
 
       <section id="cursos" className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
@@ -42,7 +49,10 @@ export default async function Home() {
             </h2>
             <CourseGrid courses={courses} failed={Boolean(coursesRes.error)} />
           </div>
-          <Testimonial />
+          <Testimonial
+            quote={content.testimonial_quote}
+            author={content.testimonial_author}
+          />
         </div>
       </section>
 

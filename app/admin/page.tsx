@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import StatusSelect from "@/components/admin/StatusSelect";
@@ -53,7 +54,15 @@ export default async function AdminPage() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <h1 className="text-3xl font-bold text-navy">Panel de administración</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-3xl font-bold text-navy">Panel de administración</h1>
+        <Link
+          href="/admin/contenido"
+          className="rounded-full bg-gold px-5 py-2 text-sm font-semibold text-navy hover:brightness-95"
+        >
+          Editar contenido e imágenes
+        </Link>
+      </div>
 
       <h2 className="mt-10 text-2xl font-bold text-navy">
         Reservas ({bookings.length})

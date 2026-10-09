@@ -127,6 +127,13 @@ export default function AuthForm({ mode }: { mode: Mode }) {
         </button>
       </form>
 
+      {isLogin && (
+        <p className="mt-4 text-center text-sm">
+          <Link href="/recuperar" className="font-semibold text-brand">
+            Olvidaste tu contraseña?
+          </Link>
+        </p>
+      )}
       <p className="mt-6 text-center text-sm text-muted">
         {isLogin ? "Aún no tienes cuenta? " : "Ya tienes cuenta? "}
         <Link
