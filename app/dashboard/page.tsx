@@ -138,7 +138,7 @@ export default async function DashboardPage() {
       nextId: next?.id ?? null,
       nextTitle: next?.title ?? null,
       nextDescription: next?.description ?? "",
-      href: next ? `/lecciones/${next.id}` : `/curso/${e.course_id}`,
+      href: next ? `/dashboard/lecciones/${next.id}` : `/dashboard/curso/${e.course_id}`,
     };
   });
 
@@ -165,9 +165,9 @@ export default async function DashboardPage() {
   const live = nextLive && nextLive.starts_at ? dayParts(nextLive.starts_at) : null;
 
   const quick = [
-    { href: "/profesores", label: "Agendar clase", sub: "Reserva con un profesor", icon: CalendarDays, tone: "bg-blue-100 text-blue-600" },
+    { href: "/dashboard/profesores", label: "Agendar clase", sub: "Reserva con un profesor", icon: CalendarDays, tone: "bg-blue-100 text-blue-600" },
     { href: "/cursos", label: "Ver cursos", sub: "Explora el catalogo", icon: BookOpen, tone: "bg-emerald-100 text-emerald-600" },
-    { href: "/mis-reservas", label: "Mis reservas", sub: "Revisa tus reservas", icon: GraduationCap, tone: "bg-amber-100 text-amber-600" },
+    { href: "/dashboard/reservas", label: "Mis reservas", sub: "Revisa tus reservas", icon: GraduationCap, tone: "bg-amber-100 text-amber-600" },
   ];
 
   return (
@@ -401,7 +401,7 @@ export default async function DashboardPage() {
                   </div>
                   <p className="mt-2 text-xs capitalize text-muted">{formatBogota(nextLive.starts_at as string)}</p>
                   <Link
-                    href={`/lecciones/${nextLive.id}`}
+                    href={`/dashboard/lecciones/${nextLive.id}`}
                     className="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-2 text-sm font-semibold text-white hover:brightness-110"
                   >
                     <Video size={16} aria-hidden="true" /> Unirse

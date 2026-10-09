@@ -130,7 +130,7 @@ export default async function MisReservasPage() {
                   </span>
                   {e.status === "activa" && (
                     <Link
-                      href={`/curso/${e.course_id}`}
+                      href={`/dashboard/curso/${e.course_id}`}
                       className="rounded-full bg-gold px-4 py-1.5 text-xs font-semibold text-navy hover:brightness-95"
                     >
                       Entrar al curso
