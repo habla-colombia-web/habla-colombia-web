@@ -11,6 +11,7 @@ import {
   Sparkles,
   ShieldCheck,
   Home,
+  Users,
   Menu,
   User,
   X,
@@ -18,6 +19,7 @@ import {
 
 const ITEMS = [
   { href: "/dashboard", label: "Inicio", icon: Home },
+  { href: "/dashboard/comunidad", label: "Comunidad", icon: Users },
   { href: "/cursos", label: "Cursos", icon: BookOpen },
   { href: "/dashboard/profesores", label: "Profesores", icon: GraduationCap },
   { href: "/dashboard/reservas", label: "Mis reservas", icon: CalendarDays },
