@@ -21,7 +21,7 @@ export function percent(done: number, total: number): number {
 
 export function formatPrice(price: number | string): string {
   const n = Number(price);
-  return n === 0 ? "Gratis" : `$${n.toLocaleString("es-CO")}`;
+  return `$${n.toLocaleString("en-US", { maximumFractionDigits: 2 })} USD`;
 }
 
 export function bgImage(url: string | null | undefined): string | undefined {

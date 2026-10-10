@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import type { Course } from "@/types";
 import EnrollButton from "./EnrollButton";
+import { formatPrice } from "@/lib/progress";
 
 type CardStyle = { icon: LucideIcon; gradient: string; badge: string };
 
@@ -49,7 +50,7 @@ export default function CourseCard({ course }: { course: Course }) {
   const style = STYLES[course.slug] ?? DEFAULT_STYLE;
   const Icon = style.icon;
   const amount = Number(course.price);
-  const price = amount === 0 ? "Gratis" : `$${amount.toLocaleString("es-CO")}`;
+  const price = formatPrice(amount);
 
   return (
     <article className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
