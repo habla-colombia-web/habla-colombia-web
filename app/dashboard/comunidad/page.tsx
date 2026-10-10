@@ -16,6 +16,7 @@ export default async function ComunidadPage() {
     .maybeSingle();
 
   if (error) {
+    console.error("comunidad:", error.code, error.message);
     return (
       <div className="mx-auto max-w-2xl px-4 py-12 text-center sm:px-6">
         <h1 className="text-2xl font-bold text-navy">Comunidad Habla Colombia</h1>
@@ -38,11 +39,27 @@ export default async function ComunidadPage() {
   const displayName =
     (spRow?.full_name && spRow.full_name.trim()) || metaName.trim() || email.split("@")[0] || "";
 
+  let profileRow = (row as MyProfile | null) ?? null;
+  const studentAvatar = spRow?.avatar_url ?? null;
+  if (
+    profileRow &&
+    !profileRow.avatar_url &&
+    studentAvatar &&
+    studentAvatar.startsWith("https://") &&
+    studentAvatar.length <= 500
+  ) {
+    const { error: syncErr } = await sb
+      .from("community_profiles")
+      .update({ avatar_url: studentAvatar, updated_at: new Date().toISOString() })
+      .eq("user_id", uid);
+    if (!syncErr) profileRow = { ...profileRow, avatar_url: studentAvatar };
+  }
+
   return (
     <CommunityApp
       userId={uid}
-      initialProfile={(row as MyProfile | null) ?? null}
-      defaults={{ display_name: displayName, avatar_url: spRow?.avatar_url ?? null }}
+      initialProfile={profileRow}
+      defaults={{ display_name: displayName, avatar_url: studentAvatar }}
     />
   );
 }
