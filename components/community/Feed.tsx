@@ -42,6 +42,23 @@ export default function Feed({
   const [hasMore, setHasMore] = useState(false);
   const [retry, setRetry] = useState(0);
   const reqRef = useRef(0);
+  const [me, setMe] = useState<{ name: string; avatar: string | null } | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    void createClient()
+      .from("community_profiles")
+      .select("display_name,avatar_url")
+      .eq("user_id", userId)
+      .maybeSingle()
+      .then(({ data }) => {
+        const r = data as { display_name: string; avatar_url: string | null } | null;
+        if (alive && r) setMe({ name: r.display_name, avatar: r.avatar_url });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [userId]);
 
   async function fetchPage(offset: number): Promise<Page | null> {
     const sb = createClient();
@@ -201,6 +218,7 @@ export default function Feed({
               post={p}
               userId={userId}
               liked={liked.has(p.id)}
+              me={me}
               onLike={handleLike}
               onDeleted={(id) => setPosts((prev) => prev.filter((x) => x.id !== id))}
               onCommentsDelta={handleComments}
