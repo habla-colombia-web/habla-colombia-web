@@ -36,7 +36,15 @@ export default async function Home() {
         text={content.hero_text}
         image={content.hero_image}
       />
-      <Features />
+      <Features
+        images={[
+          content.feature_1_image,
+          content.feature_2_image,
+          content.feature_3_image,
+          content.feature_4_image,
+          content.feature_5_image,
+        ]}
+      />
 
       <section id="cursos" className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-8 xl:grid-cols-[1fr_320px]">

@@ -34,12 +34,12 @@ const FEATURES = [
   },
 ];
 
-export default function Features() {
+export default function Features({ images = [] }: { images?: string[] }) {
   return (
     <section aria-label="Beneficios" className="bg-white">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:grid-cols-2 sm:px-6 lg:grid-cols-5">
-        {FEATURES.map((f) => (
-          <FeatureCard key={f.title} {...f} />
+        {FEATURES.map((f, i) => (
+          <FeatureCard key={f.title} {...f} image={images[i] || undefined} />
         ))}
       </div>
     </section>
