@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getContent } from "@/lib/content";
 import ContentEditor from "@/components/admin/ContentEditor";
+import FeatureImagesEditor from "@/components/admin/FeatureImagesEditor";
 import ItemEditor, { type ItemField } from "@/components/admin/ItemEditor";
 
 type CourseRow = {
@@ -137,6 +138,16 @@ export default async function ContenidoPage() {
           ))}
         </div>
       )}
+          <h2 className="mt-14 text-2xl font-bold text-navy">Tarjetas de beneficios</h2>
+      <FeatureImagesEditor
+        initial={{
+          feature_1_image: content.feature_1_image,
+          feature_2_image: content.feature_2_image,
+          feature_3_image: content.feature_3_image,
+          feature_4_image: content.feature_4_image,
+          feature_5_image: content.feature_5_image,
+        }}
+      />
     </section>
   );
 }

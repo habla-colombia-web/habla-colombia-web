@@ -13,11 +13,6 @@ const BASE_FIELDS: Field[] = [
   { key: "hero_highlight", label: "Parte resaltada del titulo", type: "text" },
   { key: "hero_text", label: "Texto del banner", type: "textarea" },
   { key: "testimonial_image", label: "Foto del testimonio", type: "image" },
-  { key: "feature_1_image", label: "Imagen tarjeta 1: Espanol colombiano y latinoamericano", type: "image" },
-  { key: "feature_2_image", label: "Imagen tarjeta 2: Profesores nativos y certificados", type: "image" },
-  { key: "feature_3_image", label: "Imagen tarjeta 3: Conversaciones reales", type: "image" },
-  { key: "feature_4_image", label: "Imagen tarjeta 4: 100% online y flexible", type: "image" },
-  { key: "feature_5_image", label: "Imagen tarjeta 5: Comunidad internacional", type: "image" },
   { key: "testimonial_quote", label: "Testimonio", type: "textarea" },
   { key: "testimonial_author", label: "Autor del testimonio", type: "text" },
   {
